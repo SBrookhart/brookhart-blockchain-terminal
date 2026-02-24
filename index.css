@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-terminal-border;
+  }
+  
+  body {
+    @apply bg-terminal-bg text-terminal-text;
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow: hidden;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-terminal-bg;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-terminal-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-terminal-dim;
+  }
+}
+
+@layer utilities {
+  /* Glow animation */
+  @keyframes glow {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  /* Pulse slow animation */
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Slide up animation */
+  @keyframes slideUp {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  /* Terminal scanline effect (optional subtle effect) */
+  .terminal-scanline {
+    position: relative;
+  }
+
+  .terminal-scanline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      transparent 50%,
+      rgba(0, 255, 136, 0.02) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    animation: scanline 8s linear infinite;
+  }
+
+  @keyframes scanline {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  /* Neon text glow */
+  .text-neon {
+    text-shadow: 
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 40px currentColor;
+  }
+
+  /* Card hover effect */
+  .card-glow {
+    transition: all 0.3s ease;
+  }
+
+  .card-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 10px 30px -10px currentColor,
+      0 0 20px -5px currentColor;
+  }
+}
+
+/* Typography */
+.font-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-feature-settings: 'liga' 0;
+}
+
+/* Selection */
+::selection {
+  @apply bg-terminal-accent text-terminal-bg;
+}
+
+/* Focus visible */
+*:focus-visible {
+  @apply outline-none ring-2 ring-terminal-accent ring-offset-2 ring-offset-terminal-bg;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, transform, opacity;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disable transitions on load */
+.preload * {
+  transition: none !important;
+}
