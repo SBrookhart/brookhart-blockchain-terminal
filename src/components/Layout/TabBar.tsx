@@ -1,13 +1,13 @@
 import { useStore } from '../../store/useStore';
 import type { TabId } from '../../types';
-import { LayoutDashboard, Link2, ArrowRightLeft, Clock, AlertTriangle } from 'lucide-react';
+import { Activity, TrendingUp, Link2, Clock, Skull } from 'lucide-react';
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
-  { id: 'overview', label: 'OVERVIEW', icon: <LayoutDashboard size={12} /> },
+  { id: 'pulse', label: 'PULSE', icon: <Activity size={12} /> },
+  { id: 'narratives', label: 'NARRATIVES', icon: <TrendingUp size={12} /> },
   { id: 'chains', label: 'CHAINS', icon: <Link2 size={12} /> },
-  { id: 'flows', label: 'FLOWS', icon: <ArrowRightLeft size={12} /> },
   { id: 'timeline', label: 'TIMELINE', icon: <Clock size={12} /> },
-  { id: 'risk', label: 'RISK', icon: <AlertTriangle size={12} /> },
+  { id: 'graveyard', label: 'GRAVEYARD', icon: <Skull size={12} /> },
 ];
 
 /**

@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { TopBar } from './components/Layout/TopBar';
 import { TabBar } from './components/Layout/TabBar';
 import { BottomBar } from './components/Layout/BottomBar';
-import { Overview } from './components/Views/Overview';
+import { Pulse } from './components/Views/Pulse';
+import { Narratives } from './components/Views/Narratives';
 import { Chains } from './components/Views/Chains';
-import { Flows } from './components/Views/Flows';
 import { Timeline } from './components/Views/Timeline';
-import { Risk } from './components/Views/Risk';
+import { Graveyard } from './components/Views/Graveyard';
 import { useStore } from './store/useStore';
 
 function App() {
@@ -17,17 +17,17 @@ function App() {
     fetchAllData();
   }, [fetchAllData]);
 
-  // Keyboard shortcuts
+  // Keyboard shortcuts (1-5 switch tabs)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
       switch (e.key) {
-        case '1': setActiveTab('overview'); break;
-        case '2': setActiveTab('chains'); break;
-        case '3': setActiveTab('flows'); break;
+        case '1': setActiveTab('pulse'); break;
+        case '2': setActiveTab('narratives'); break;
+        case '3': setActiveTab('chains'); break;
         case '4': setActiveTab('timeline'); break;
-        case '5': setActiveTab('risk'); break;
+        case '5': setActiveTab('graveyard'); break;
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -39,11 +39,11 @@ function App() {
       <TopBar />
       <TabBar />
       <main className="flex-1 overflow-hidden">
-        {activeTab === 'overview' && <Overview />}
+        {activeTab === 'pulse' && <Pulse />}
+        {activeTab === 'narratives' && <Narratives />}
         {activeTab === 'chains' && <Chains />}
-        {activeTab === 'flows' && <Flows />}
         {activeTab === 'timeline' && <Timeline />}
-        {activeTab === 'risk' && <Risk />}
+        {activeTab === 'graveyard' && <Graveyard />}
       </main>
       <BottomBar />
     </div>

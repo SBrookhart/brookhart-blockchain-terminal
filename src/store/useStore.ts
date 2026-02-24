@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { AppState } from '../types';
+import { NARRATIVES } from '../data/narratives';
 import { EVENTS } from '../data/events';
 import { DEAD_PROJECTS } from '../data/deadProjects';
 import { FLOWS } from '../data/flows';
@@ -8,7 +9,7 @@ import { fetchTopTokens, fetchGlobalData, MOCK_TOP_TOKENS, MOCK_GLOBAL } from '.
 
 export const useStore = create<AppState>((set) => ({
   // Navigation
-  activeTab: 'overview',
+  activeTab: 'pulse',
   setActiveTab: (tab) => set({ activeTab: tab }),
 
   // Market data
@@ -19,6 +20,7 @@ export const useStore = create<AppState>((set) => ({
   globalData: MOCK_GLOBAL,
 
   // Curated data
+  narratives: NARRATIVES,
   events: EVENTS,
   deadProjects: DEAD_PROJECTS,
   flows: FLOWS,
@@ -26,6 +28,8 @@ export const useStore = create<AppState>((set) => ({
   // Selection
   selectedChain: null,
   selectChain: (chain) => set({ selectedChain: chain }),
+  selectedNarrative: null,
+  selectNarrative: (id) => set({ selectedNarrative: id }),
 
   // Timeline
   currentDate: new Date(),
