@@ -16,7 +16,6 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
           'animation-vendor': ['framer-motion'],
-          'pixi-vendor': ['pixi.js'],
         },
       },
     },
