@@ -4,7 +4,7 @@
 
 // ---- Navigation ----
 
-export type TabId = 'overview' | 'chains' | 'flows' | 'timeline' | 'risk';
+export type TabId = 'pulse' | 'narratives' | 'chains' | 'timeline' | 'graveyard';
 
 // ---- Market Data (CoinGecko) ----
 
@@ -86,6 +86,29 @@ export interface NarrativeEvent {
   source?: string;
 }
 
+// ---- Narratives ----
+
+export type NarrativeStatus = 'emerging' | 'heating' | 'peak' | 'cooling' | 'dead';
+
+export interface Narrative {
+  id: string;
+  name: string;
+  status: NarrativeStatus;
+  thesis: string;
+  chains: string[];
+  protocols: string[];
+  tokens: string[];
+  tvlTotal: number;
+  tvlChange7d: number;
+  socialScore: number;
+  riskLevel: 'low' | 'medium' | 'high';
+  startDate: string;
+  endDate?: string;
+  keyMetrics: Array<{ label: string; value: string }>;
+  catalysts: string[];
+  risks: string[];
+}
+
 // ---- Dead Projects ----
 
 export interface DeadProject {
@@ -119,6 +142,7 @@ export interface AppState {
   };
 
   // Curated data
+  narratives: Narrative[];
   events: NarrativeEvent[];
   deadProjects: DeadProject[];
   flows: CapitalFlow[];
@@ -126,6 +150,8 @@ export interface AppState {
   // Selection
   selectedChain: string | null;
   selectChain: (chain: string | null) => void;
+  selectedNarrative: string | null;
+  selectNarrative: (id: string | null) => void;
 
   // Timeline
   currentDate: Date;
