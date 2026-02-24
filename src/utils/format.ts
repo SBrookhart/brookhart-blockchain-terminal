@@ -1,6 +1,23 @@
 /**
- * Formatting utilities for the Internet Money Map.
+ * Formatting utilities for the Internet Money Map Terminal.
  */
+
+/** Format a large number with appropriate suffix ($1.2T, $48.2B, $350M, $12.5K) */
+export function formatLargeNumber(value: number): string {
+  if (Math.abs(value) >= 1_000_000_000_000) {
+    return `$${(value / 1_000_000_000_000).toFixed(1)}T`;
+  }
+  if (Math.abs(value) >= 1_000_000_000) {
+    return `$${(value / 1_000_000_000).toFixed(1)}B`;
+  }
+  if (Math.abs(value) >= 1_000_000) {
+    return `$${(value / 1_000_000).toFixed(1)}M`;
+  }
+  if (Math.abs(value) >= 1_000) {
+    return `$${(value / 1_000).toFixed(1)}K`;
+  }
+  return `$${value.toFixed(0)}`;
+}
 
 /** Format a number as billions (e.g., 48.2 → "$48.2B") */
 export function formatBillions(value: number): string {

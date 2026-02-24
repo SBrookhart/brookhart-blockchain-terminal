@@ -1,113 +1,83 @@
 import { create } from 'zustand';
-import type { AppState, FeatureToggles } from '../types';
-import { SECTORS } from '../data/sectors';
-import { FLOWS } from '../data/flows';
+import type { AppState } from '../types';
 import { EVENTS } from '../data/events';
-import { WHALES } from '../data/whales';
 import { DEAD_PROJECTS } from '../data/deadProjects';
-import { fetchLiveSectorData, fetchChainTvl } from '../api/defillama';
+import { FLOWS } from '../data/flows';
+import { fetchChains, fetchProtocols, fetchChainTvl, MOCK_CHAINS, MOCK_PROTOCOLS } from '../api/defillama';
+import { fetchTopTokens, fetchGlobalData, MOCK_TOP_TOKENS, MOCK_GLOBAL } from '../api/coingecko';
 
-export const useStore = create<AppState>((set, get) => ({
-  // View
-  mode: 'live',
-  timeRange: '30d',
+export const useStore = create<AppState>((set) => ({
+  // Navigation
+  activeTab: 'overview',
+  setActiveTab: (tab) => set({ activeTab: tab }),
+
+  // Market data
+  topTokens: MOCK_TOP_TOKENS,
+  chains: MOCK_CHAINS,
+  protocols: MOCK_PROTOCOLS,
+  tvlHistory: {},
+  globalData: MOCK_GLOBAL,
+
+  // Curated data
+  events: EVENTS,
+  deadProjects: DEAD_PROJECTS,
+  flows: FLOWS,
+
+  // Selection
+  selectedChain: null,
+  selectChain: (chain) => set({ selectedChain: chain }),
 
   // Timeline
   currentDate: new Date(),
   isPlaying: false,
   playbackSpeed: 1,
-
-  // Data
-  sectors: SECTORS,
-  flows: FLOWS,
-  events: EVENTS,
-  whales: WHALES,
-  deadProjects: DEAD_PROJECTS,
-  tvlHistory: {},
-
-  // Selection
-  selectedSector: null,
-  selectedEvent: null,
-  hoveredSector: null,
-
-  // Features
-  features: {
-    showSmartMoney: false,
-    showDeadZone: false,
-    showTutorial: false,
-    showPredictions: false,
-  },
+  setCurrentDate: (date) => set({ currentDate: date }),
+  togglePlay: () => set((s) => ({ isPlaying: !s.isPlaying })),
+  setPlaybackSpeed: (speed) => set({ playbackSpeed: speed }),
 
   // Loading
   isLoading: false,
   error: null,
 
-  // Actions
-  setMode: (mode) => set({ mode }),
-  setTimeRange: (timeRange) => set({ timeRange }),
-  setCurrentDate: (currentDate) => set({ currentDate }),
-
-  togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
-  setPlaybackSpeed: (playbackSpeed) => set({ playbackSpeed }),
-
-  selectSector: (id) => set({ selectedSector: id, selectedEvent: null }),
-  selectEvent: (id) => set({ selectedEvent: id, selectedSector: null }),
-  setHoveredSector: (id) => set({ hoveredSector: id }),
-
-  toggleFeature: (feature: keyof FeatureToggles) =>
-    set((state) => ({
-      features: {
-        ...state.features,
-        [feature]: !state.features[feature],
-      },
-    })),
-
-  setSectors: (sectors) => set({ sectors }),
-  setFlows: (flows) => set({ flows }),
-
-  setTvlHistory: (chain, data) =>
-    set((state) => ({
-      tvlHistory: { ...state.tvlHistory, [chain]: data },
-    })),
-
-  setLoading: (isLoading) => set({ isLoading }),
-  setError: (error) => set({ error }),
-
-  fetchLiveData: async () => {
-    const state = get();
+  // Fetch all data from APIs (with fallback to mocks)
+  fetchAllData: async () => {
     set({ isLoading: true, error: null });
-
     try {
-      // Fetch live chain TVL data
-      const updatedSectors = await fetchLiveSectorData(state.sectors);
-      set({ sectors: updatedSectors });
+      const [chainsRes, protocolsRes, tokensRes, globalRes] = await Promise.allSettled([
+        fetchChains(),
+        fetchProtocols(),
+        fetchTopTokens(),
+        fetchGlobalData(),
+      ]);
 
-      // Fetch historical TVL for chains that have a DeFiLlama slug
-      const chainsToFetch = updatedSectors.filter(s => s.llamaChainSlug);
-      const historyPromises = chainsToFetch.map(async (sector) => {
-        try {
-          const data = await fetchChainTvl(sector.llamaChainSlug!);
-          return { chain: sector.id, data };
-        } catch {
-          return null;
-        }
-      });
-
-      const results = await Promise.all(historyPromises);
-      const tvlHistory: Record<string, typeof results[0] extends { data: infer D } | null ? D : never> = {};
-      for (const result of results) {
-        if (result) {
-          tvlHistory[result.chain] = result.data;
-        }
-      }
-
-      set({ tvlHistory, isLoading: false });
-    } catch (err) {
-      console.error('Failed to fetch live data:', err);
       set({
+        chains: chainsRes.status === 'fulfilled'
+          ? chainsRes.value.sort((a: { tvl: number }, b: { tvl: number }) => b.tvl - a.tvl).slice(0, 30)
+          : MOCK_CHAINS,
+        protocols: protocolsRes.status === 'fulfilled'
+          ? protocolsRes.value
+          : MOCK_PROTOCOLS,
+        topTokens: tokensRes.status === 'fulfilled'
+          ? tokensRes.value
+          : MOCK_TOP_TOKENS,
+        globalData: globalRes.status === 'fulfilled'
+          ? globalRes.value
+          : MOCK_GLOBAL,
         isLoading: false,
-        error: err instanceof Error ? err.message : 'Failed to fetch data',
       });
+    } catch {
+      set({ isLoading: false, error: 'Failed to fetch data. Using cached data.' });
+    }
+  },
+
+  fetchChainHistory: async (chain: string) => {
+    try {
+      const data = await fetchChainTvl(chain);
+      set((s) => ({
+        tvlHistory: { ...s.tvlHistory, [chain]: data },
+      }));
+    } catch {
+      // Silently fail — historical data is optional
     }
   },
 }));
