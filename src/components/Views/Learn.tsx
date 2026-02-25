@@ -4,13 +4,13 @@ import { useStore } from '../../store/useStore';
 import {
   GLOSSARY,
   TRANSACTION_LIFECYCLE,
-  TRANSACTION_DIAGRAM,
   CHAIN_PROFILES,
   CHAIN_COMPARISON,
   CONTRACT_PARTS,
   CONTRACT_LIFECYCLE_DIAGRAM,
   CONTRACT_EXAMPLE,
 } from '../../data/education';
+import { TransactionFlowDiagram } from '../Widgets/TransactionFlowDiagram';
 import type { GlossaryTerm } from '../../data/education';
 
 type LearnSection = 'transaction' | 'smart-contract' | 'glossary' | 'chains';
@@ -94,12 +94,8 @@ export function Learn() {
               it's permanently recorded on the blockchain.
             </p>
 
-            {/* ASCII diagram */}
-            <div className="bg-terminal-bg rounded border border-terminal-border p-3 mb-4 overflow-x-auto">
-              <pre className="text-[9px] text-terminal-accent font-mono leading-tight whitespace-pre">
-                {TRANSACTION_DIAGRAM.trim()}
-              </pre>
-            </div>
+            {/* SVG flow diagram */}
+            <TransactionFlowDiagram />
 
             {/* Steps */}
             <div className="space-y-3">
