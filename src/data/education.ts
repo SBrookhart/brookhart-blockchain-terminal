@@ -32,7 +32,15 @@ export const GLOSSARY: GlossaryTerm[] = [
     shortDef: 'A program on a blockchain that runs automatically when conditions are met.',
     explanation: 'A smart contract is a small program that lives on a blockchain. Once deployed, it runs automatically — no middleman needed. When you interact with DeFi apps like Uniswap, you\'re actually sending instructions to smart contracts. They handle the trade, enforce the rules, and settle everything instantly. The key innovation: the code is public, so anyone can verify exactly what it does before trusting it with their money.',
     analogy: 'Think of a vending machine. You put in $2, press B4, and a snack drops out. The machine enforces the deal automatically — no cashier, no trust required. A smart contract works the same way, but for financial transactions.',
-    relatedTerms: ['defi', 'gas-fees', 'blockchain'],
+    relatedTerms: ['solidity', 'defi', 'gas-fees', 'blockchain'],
+  },
+  {
+    id: 'solidity',
+    term: 'Solidity',
+    shortDef: 'The most popular programming language for writing smart contracts on Ethereum.',
+    explanation: 'Solidity is a programming language specifically designed for writing smart contracts on Ethereum and other compatible blockchains (like Avalanche, Arbitrum, and Base). It was created in 2014 and has become the dominant language in the crypto ecosystem. Most of the DeFi protocols you interact with — Uniswap, Aave, Compound — are written in Solidity. If you\'ve heard someone say they\'re a "Solidity developer," they build smart contracts. Other chains use different languages: Solana uses Rust, and some newer chains support Move.',
+    analogy: 'If blockchains are like operating systems (Windows, Mac, Linux), then Solidity is like a programming language built specifically for one of them. Just as Swift is the language for building iPhone apps, Solidity is the language for building Ethereum apps.',
+    relatedTerms: ['smart-contract', 'defi', 'gas-fees'],
   },
   {
     id: 'defi',

@@ -192,6 +192,14 @@ export function Learn() {
               This is essentially how Uniswap works — users swap tokens, the contract enforces the rules,
               and everything is transparent and automatic.
             </p>
+            <div className="mb-3 bg-terminal-bg rounded px-3 py-2 border-l-2 border-blue-400">
+              <span className="text-[9px] font-display text-blue-400 tracking-wider">NOTE: </span>
+              <span className="text-[11px] text-terminal-dim">
+                This is readable pseudocode, not actual Solidity (the programming language used to write real smart contracts
+                on Ethereum). Real Solidity code looks more like traditional programming — but the logic and structure are the same.
+                We wrote it this way so you can focus on <em>what</em> a contract does, not the syntax.
+              </span>
+            </div>
             <div className="bg-terminal-bg rounded border border-terminal-border p-3 overflow-x-auto">
               <pre className="text-[10px] text-terminal-text font-mono leading-relaxed whitespace-pre">
                 {CONTRACT_EXAMPLE.trim()}
