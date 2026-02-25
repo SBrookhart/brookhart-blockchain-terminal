@@ -304,3 +304,109 @@ export const CHAIN_COMPARISON: ChainComparisonRow[] = [
   { chain: 'Solana', symbol: 'SOL', speed: '~0.4 sec blocks', cost: '<$0.01', security: 'Moderate', bestFor: 'Speed & low cost' },
   { chain: 'Avalanche', symbol: 'AVAX', speed: '~2 sec finality', cost: '<$0.10', security: 'High', bestFor: 'Enterprise & subnets' },
 ];
+
+// ---- Anatomy of a Smart Contract ----
+
+export interface ContractPart {
+  id: string;
+  name: string;
+  whatItIs: string;
+  realWorldAnalogy: string;
+  example: string;
+}
+
+export const CONTRACT_PARTS: ContractPart[] = [
+  {
+    id: 'address',
+    name: 'The Address',
+    whatItIs: 'Every smart contract has a unique address on the blockchain — like a street address for a building. When you want to interact with a contract (say, swap tokens on Uniswap), your wallet sends a transaction to that contract\'s address. The address is generated when the contract is deployed and never changes.',
+    realWorldAnalogy: 'Like the address of a bank branch. You need to know where to go to do business there. Anyone can look up the address and see what\'s inside.',
+    example: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+  },
+  {
+    id: 'state',
+    name: 'The State (Storage)',
+    whatItIs: 'State is the contract\'s memory — the data it keeps track of. A token contract remembers how many tokens each person owns. A lending contract tracks who borrowed what, and how much interest they owe. This state is stored permanently on the blockchain, which is why blockchains need so much storage and why gas fees exist — you\'re paying the network to remember things.',
+    realWorldAnalogy: 'Think of a bank\'s ledger that records every customer\'s balance. The state is that ledger — always up to date, always accessible, and everyone can verify it matches.',
+    example: 'balances: { Alice: 500 USDC, Bob: 1,200 USDC }\ntotalSupply: 1,000,000 tokens\nowner: 0xABC...123',
+  },
+  {
+    id: 'functions',
+    name: 'The Functions',
+    whatItIs: 'Functions are the actions a contract can perform — the buttons you can press. A token contract might have functions like "transfer" (send tokens to someone), "approve" (let another contract spend your tokens), and "balanceOf" (check someone\'s balance). Some functions change the state (and cost gas), while others just read data (free to call).',
+    realWorldAnalogy: 'Like the services a bank offers: deposit, withdraw, check balance, transfer. Each service has rules about who can use it and what happens when you do.',
+    example: 'transfer(to: Bob, amount: 100 USDC)\napprove(spender: Uniswap, amount: 500 USDC)\nbalanceOf(account: Alice) → 500 USDC',
+  },
+  {
+    id: 'events',
+    name: 'The Events',
+    whatItIs: 'Events are announcements the contract makes when something important happens. When you transfer tokens, the contract emits a "Transfer" event that says who sent what to whom. Apps and block explorers listen for these events to update their UI in real time. Events are also how you can search the blockchain\'s history — "show me every transfer of this token in the last 24 hours."',
+    realWorldAnalogy: 'Like a receipt or notification. Every time you do something at the bank, they give you a receipt and maybe send a push notification. Events are the blockchain\'s version of that — a permanent, public record that something happened.',
+    example: 'Event: Transfer(from: Alice, to: Bob, amount: 100 USDC)\nEvent: Approval(owner: Alice, spender: Uniswap, amount: 500 USDC)',
+  },
+  {
+    id: 'access-control',
+    name: 'The Rules (Access Control)',
+    whatItIs: 'Not everyone can do everything. Smart contracts have rules about who can call which functions. Some functions are public (anyone can call them, like checking a balance). Others are restricted — only the contract owner can pause the contract, only the governance system can change fees, only you can withdraw your own funds. These rules are enforced by code, not people.',
+    realWorldAnalogy: 'Like permissions at a company. An employee can check their own pay stub, but only HR can change salaries. A customer can use the ATM, but only the bank manager can open the vault. The rules are built into the system.',
+    example: 'transfer → anyone can call (but only with their own tokens)\npause → only the contract owner\nsetFee → only governance vote\nwithdraw → only if you have a balance',
+  },
+  {
+    id: 'immutability',
+    name: 'The Immutability',
+    whatItIs: 'Once a smart contract is deployed to the blockchain, its code cannot be changed. This is both the superpower and the Achilles\' heel of smart contracts. The superpower: nobody (not even the creator) can secretly change the rules after you\'ve agreed to them. The risk: if there\'s a bug in the code, it can\'t be patched like a normal app. This is why smart contract audits are so important — and why hacks happen when contracts have undiscovered vulnerabilities.',
+    realWorldAnalogy: 'Imagine signing a legal contract that\'s been carved into stone. No one can alter the terms after the fact, which protects you — but if there\'s a typo that creates a loophole, it\'s permanent too.',
+    example: 'Deployed once → lives forever at its address\nCode is public → anyone can read and verify\nBugs are permanent → audits happen BEFORE deployment\nUpgradeable patterns exist, but add trust assumptions',
+  },
+];
+
+export const CONTRACT_LIFECYCLE_DIAGRAM = `
+  ┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐
+  │  WRITE   │      │  DEPLOY  │      │ INTERACT │      │  EVENTS  │
+  │          │─────▶│          │─────▶│          │─────▶│          │
+  │ Developer│      │ Send to  │      │ Users    │      │ Announce │
+  │ writes   │      │ blockchain│      │ call     │      │ what     │
+  │ the code │      │ (one-time│      │ functions│      │ happened │
+  │          │      │  tx + gas)│      │ (pay gas)│      │ (logs)   │
+  └──────────┘      └──────────┘      └──────────┘      └──────────┘
+                          │
+                          ▼
+                    ┌──────────┐
+                    │ PERMANENT│
+                    │ Gets a   │
+                    │ unique   │
+                    │ address  │
+                    │ on-chain │
+                    └──────────┘
+`;
+
+export const CONTRACT_EXAMPLE = `// A simplified token swap contract (pseudocode, not real Solidity)
+// This is what Uniswap looks like under the hood, simplified.
+
+CONTRACT TokenSwap:
+
+  STATE:
+    pool_token_a: 10,000 USDC          // Tokens available to trade
+    pool_token_b: 5 ETH                // Other side of the pair
+    fee_rate: 0.3%                     // Fee on every trade
+    fee_collector: 0xABC...            // Where fees go
+
+  FUNCTION swap(sell: Token, amount: Number):
+    1. Check: Does the user actually have enough tokens?
+    2. Calculate: How many tokens they get back (based on pool ratio)
+    3. Deduct: The 0.3% fee
+    4. Update: Pool balances (more of what they sold, less of what they bought)
+    5. Transfer: Send the bought tokens to the user
+    6. Emit: SwapEvent(user, sold, bought, fee)
+
+  FUNCTION addLiquidity(tokenA_amount, tokenB_amount):
+    1. Check: Are the amounts in the correct ratio?
+    2. Transfer: Pull tokens from user into the pool
+    3. Mint: Give user LP tokens (proof of their deposit)
+    4. Emit: LiquidityAdded(user, amounts)
+
+  RULES:
+    swap → anyone can call
+    addLiquidity → anyone can call
+    changeFee → only governance vote
+    pause → only owner (emergency)`;

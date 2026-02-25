@@ -7,13 +7,17 @@ import {
   TRANSACTION_DIAGRAM,
   CHAIN_PROFILES,
   CHAIN_COMPARISON,
+  CONTRACT_PARTS,
+  CONTRACT_LIFECYCLE_DIAGRAM,
+  CONTRACT_EXAMPLE,
 } from '../../data/education';
 import type { GlossaryTerm } from '../../data/education';
 
-type LearnSection = 'transaction' | 'glossary' | 'chains';
+type LearnSection = 'transaction' | 'smart-contract' | 'glossary' | 'chains';
 
 const SECTION_TABS: { id: LearnSection; label: string }[] = [
   { id: 'transaction', label: 'How a Transaction Works' },
+  { id: 'smart-contract', label: 'Anatomy of a Smart Contract' },
   { id: 'glossary', label: 'Glossary' },
   { id: 'chains', label: 'BTC vs ETH vs SOL vs AVAX' },
 ];
@@ -31,12 +35,14 @@ export function Learn() {
   const [activeSection, setActiveSection] = useState<LearnSection>(
     selectedLearnSection === 'glossary' ? 'glossary'
       : selectedLearnSection === 'chains' ? 'chains'
-        : 'transaction'
+        : selectedLearnSection === 'smart-contract' ? 'smart-contract'
+          : 'transaction'
   );
   const [expandedTerm, setExpandedTerm] = useState<string | null>(
     useStore.getState().selectedLearnTerm,
   );
   const [expandedChain, setExpandedChain] = useState<string | null>(null);
+  const [expandedPart, setExpandedPart] = useState<string | null>(null);
 
   const handleTermToggle = (id: string) => {
     const next = expandedTerm === id ? null : id;
@@ -119,7 +125,92 @@ export function Learn() {
       )}
 
       {/* ============================================================ */}
-      {/* SECTION 2: Glossary */}
+      {/* SECTION 2: Anatomy of a Smart Contract */}
+      {/* ============================================================ */}
+      {activeSection === 'smart-contract' && (
+        <div className="space-y-2">
+          <Panel title="Anatomy of a Smart Contract">
+            <p className="text-[11px] text-terminal-dim leading-relaxed mb-4">
+              A smart contract is a program that lives on a blockchain. But what does it actually look like on the inside?
+              Every smart contract has the same basic building blocks. Understanding these parts helps you read what a project
+              actually does — not just what it claims to do.
+            </p>
+
+            {/* Lifecycle diagram */}
+            <div className="bg-terminal-bg rounded border border-terminal-border p-3 mb-4 overflow-x-auto">
+              <div className="text-[9px] font-display text-terminal-dim tracking-wider uppercase mb-2">Lifecycle: From Code to Blockchain</div>
+              <pre className="text-[9px] text-terminal-accent font-mono leading-tight whitespace-pre">
+                {CONTRACT_LIFECYCLE_DIAGRAM.trim()}
+              </pre>
+            </div>
+
+            {/* The 6 parts */}
+            <div className="text-[10px] font-display text-terminal-dim tracking-wider uppercase mb-2">
+              The 6 Building Blocks
+            </div>
+            <div className="space-y-1 mb-4">
+              {CONTRACT_PARTS.map((part) => (
+                <div key={part.id} className="border border-terminal-border/50 rounded overflow-hidden">
+                  <button
+                    onClick={() => setExpandedPart(expandedPart === part.id ? null : part.id)}
+                    className="w-full flex items-center justify-between px-3 py-2 hover:bg-terminal-bg transition-colors"
+                  >
+                    <span className="text-[12px] font-bold text-terminal-text">{part.name}</span>
+                    <span className="text-[10px] text-terminal-dim font-display">
+                      {expandedPart === part.id ? '▼' : '▶'}
+                    </span>
+                  </button>
+
+                  {expandedPart === part.id && (
+                    <div className="px-3 pb-3 space-y-2 border-t border-terminal-border/30">
+                      <p className="text-[11px] text-terminal-dim leading-relaxed pt-2">
+                        {part.whatItIs}
+                      </p>
+
+                      <div className="bg-terminal-bg rounded px-3 py-2 border-l-2 border-terminal-accent">
+                        <span className="text-[9px] font-display text-terminal-accent tracking-wider">ANALOGY: </span>
+                        <span className="text-[11px] text-terminal-dim">{part.realWorldAnalogy}</span>
+                      </div>
+
+                      <div className="bg-terminal-bg rounded border border-terminal-border p-2">
+                        <div className="text-[9px] font-display text-terminal-dim tracking-wider mb-1">EXAMPLE:</div>
+                        <pre className="text-[10px] text-terminal-text font-mono leading-relaxed whitespace-pre-wrap">
+                          {part.example}
+                        </pre>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </Panel>
+
+          {/* Full example contract */}
+          <Panel title="Putting It All Together — A Token Swap Contract">
+            <p className="text-[11px] text-terminal-dim leading-relaxed mb-3">
+              Here's what a real DeFi contract looks like, simplified into plain-English pseudocode.
+              This is essentially how Uniswap works — users swap tokens, the contract enforces the rules,
+              and everything is transparent and automatic.
+            </p>
+            <div className="bg-terminal-bg rounded border border-terminal-border p-3 overflow-x-auto">
+              <pre className="text-[10px] text-terminal-text font-mono leading-relaxed whitespace-pre">
+                {CONTRACT_EXAMPLE.trim()}
+              </pre>
+            </div>
+            <div className="mt-3 bg-terminal-bg rounded px-3 py-2 border-l-2 border-yellow-400">
+              <span className="text-[9px] font-display text-yellow-400 tracking-wider">KEY TAKEAWAY: </span>
+              <span className="text-[11px] text-terminal-dim">
+                The entire logic is visible. Anyone can read the contract's code on the blockchain before trusting it with
+                their money. This transparency is what makes DeFi different from traditional finance — the rules aren't hidden
+                in a legal document, they're written in code that anyone can verify.
+              </span>
+            </div>
+          </Panel>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* SECTION 3: Glossary */}
       {/* ============================================================ */}
       {activeSection === 'glossary' && (
         <div className="space-y-1">
