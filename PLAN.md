@@ -22,10 +22,14 @@ Replace the current PULSE tab with **Current Pulse** — an hourly-refreshed cry
 - Manual refresh button (circular arrow icon)
 
 ### 2. Executive Summary (hero section)
-- 3-4 sentence market overview generated from templates + live data
-- Example: "Crypto market cap sits at $2.1T, up 3.2% in 24h. BTC dominance at 52.1%. The AI Agents narrative continues heating with $4.2B TVL (+18% 7d). Risk elevated: Ethereum gas averaging 45 gwei signals congestion."
-- Template strings that interpolate live CoinGecko + DeFiLlama numbers
-- Styled as a prominent text block with a left accent border
+- **7-8 narrative-style bullets** that tell the story of "what's happening in crypto right now"
+- Story-first arc: Big Picture → Bitcoin's Role → Hottest Narrative → Secondary Momentum → Chain Activity → What's Cooling → Risk Watch → Emerging Frontier
+- Each bullet: bold headline + 2-3 sentence mini-paragraph with educational context
+- **Tone:** Professional but accessible — a smart friend explaining crypto. Jargon is avoided or explained inline (e.g., "BTC dominance" is defined when first used, TVL is described as "total deposits")
+- **Generated dynamically** from live CoinGecko + DeFiLlama data + curated narrative data via `src/data/reportTemplates.ts`
+- Each bullet has a sentiment indicator (bullish/bearish/neutral/caution) shown as a colored left accent bar
+- Styled as a prominent panel with colored accent bars per bullet
+- **Implemented:** `src/data/reportTemplates.ts` (generation logic) + `src/components/Widgets/ExecutiveSummary.tsx` (render component)
 
 ### 3. Market Snapshot (grid of stat cards)
 - Row of 4-6 key metrics in compact cards:
