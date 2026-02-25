@@ -1,5 +1,5 @@
 // ============================================================
-// Internet Money Map Terminal - Type Definitions
+// Brookhart Blockchain Terminal - Type Definitions
 // ============================================================
 
 // ---- Navigation ----

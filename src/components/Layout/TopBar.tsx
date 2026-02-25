@@ -18,7 +18,7 @@ export function TopBar() {
       <div className="flex items-center gap-1.5 mr-4 pr-4 border-r border-terminal-border">
         <div className="w-1.5 h-1.5 rounded-full bg-terminal-accent animate-pulse" />
         <span className="text-terminal-accent font-bold tracking-widest text-[10px]">
-          IMM
+          BBT
         </span>
       </div>
 
