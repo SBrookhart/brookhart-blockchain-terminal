@@ -28,7 +28,7 @@ export function BottomBar() {
           BROOKHART BLOCKCHAIN TERMINAL v2.0
         </span>
       </div>
-      <div className="flex items-center justify-between h-4 px-3 text-[8px] text-terminal-dim/50 font-display tracking-wider">
+      <div className="flex items-center justify-between h-5 px-3 text-[9px] text-terminal-dim font-display tracking-wider">
         <span>Built quietly, shipped deliberately.</span>
         <span>&copy; 2025 Brookhart Labs</span>
       </div>
