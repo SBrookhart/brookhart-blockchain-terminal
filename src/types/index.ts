@@ -4,7 +4,7 @@
 
 // ---- Navigation ----
 
-export type TabId = 'pulse' | 'narratives' | 'chains' | 'timeline' | 'graveyard';
+export type TabId = 'pulse' | 'narratives' | 'chains' | 'timeline' | 'graveyard' | 'learn';
 
 // ---- Market Data (CoinGecko) ----
 
@@ -152,6 +152,13 @@ export interface AppState {
   selectChain: (chain: string | null) => void;
   selectedNarrative: string | null;
   selectNarrative: (id: string | null) => void;
+
+  // Learn tab navigation
+  selectedLearnSection: string | null;
+  selectLearnSection: (section: string | null) => void;
+  selectedLearnTerm: string | null;
+  selectLearnTerm: (term: string | null) => void;
+  navigateToGlossary: (termId: string) => void;
 
   // Timeline
   currentDate: Date;

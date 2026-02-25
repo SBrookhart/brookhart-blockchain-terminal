@@ -31,6 +31,17 @@ export const useStore = create<AppState>((set) => ({
   selectedNarrative: null,
   selectNarrative: (id) => set({ selectedNarrative: id }),
 
+  // Learn tab navigation
+  selectedLearnSection: null,
+  selectLearnSection: (section) => set({ selectedLearnSection: section }),
+  selectedLearnTerm: null,
+  selectLearnTerm: (term) => set({ selectedLearnTerm: term }),
+  navigateToGlossary: (termId) => set({
+    activeTab: 'learn',
+    selectedLearnSection: 'glossary',
+    selectedLearnTerm: termId,
+  }),
+
   // Timeline
   currentDate: new Date(),
   isPlaying: false,

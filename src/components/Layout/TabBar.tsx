@@ -1,6 +1,6 @@
 import { useStore } from '../../store/useStore';
 import type { TabId } from '../../types';
-import { Activity, TrendingUp, Link2, Clock, Skull } from 'lucide-react';
+import { Activity, TrendingUp, Link2, Clock, Skull, BookOpen } from 'lucide-react';
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'pulse', label: 'PULSE', icon: <Activity size={12} /> },
@@ -8,6 +8,7 @@ const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'chains', label: 'CHAINS', icon: <Link2 size={12} /> },
   { id: 'timeline', label: 'TIMELINE', icon: <Clock size={12} /> },
   { id: 'graveyard', label: 'GRAVEYARD', icon: <Skull size={12} /> },
+  { id: 'learn', label: 'LEARN', icon: <BookOpen size={12} /> },
 ];
 
 /**
