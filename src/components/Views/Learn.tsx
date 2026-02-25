@@ -5,12 +5,12 @@ import {
   GLOSSARY,
   TRANSACTION_LIFECYCLE,
   CHAIN_PROFILES,
-  CHAIN_COMPARISON,
-  CONTRACT_PARTS,
-  CONTRACT_LIFECYCLE_DIAGRAM,
+  CHAIN_PERSONAS,
+  COST_SCENARIOS,
   CONTRACT_EXAMPLE,
 } from '../../data/education';
 import { TransactionFlowDiagram } from '../Widgets/TransactionFlowDiagram';
+import { SmartContractDiagram } from '../Widgets/SmartContractDiagram';
 import type { GlossaryTerm } from '../../data/education';
 
 type LearnSection = 'transaction' | 'smart-contract' | 'glossary' | 'chains';
@@ -42,7 +42,7 @@ export function Learn() {
     useStore.getState().selectedLearnTerm,
   );
   const [expandedChain, setExpandedChain] = useState<string | null>(null);
-  const [expandedPart, setExpandedPart] = useState<string | null>(null);
+  const [expandedScenario, setExpandedScenario] = useState<string | null>(null);
 
   const handleTermToggle = (id: string) => {
     const next = expandedTerm === id ? null : id;
@@ -132,53 +132,8 @@ export function Learn() {
               actually does — not just what it claims to do.
             </p>
 
-            {/* Lifecycle diagram */}
-            <div className="bg-terminal-bg rounded border border-terminal-border p-3 mb-4 overflow-x-auto">
-              <div className="text-[9px] font-display text-terminal-dim tracking-wider uppercase mb-2">Lifecycle: From Code to Blockchain</div>
-              <pre className="text-[9px] text-terminal-accent font-mono leading-tight whitespace-pre">
-                {CONTRACT_LIFECYCLE_DIAGRAM.trim()}
-              </pre>
-            </div>
-
-            {/* The 6 parts */}
-            <div className="text-[10px] font-display text-terminal-dim tracking-wider uppercase mb-2">
-              The 6 Building Blocks
-            </div>
-            <div className="space-y-1 mb-4">
-              {CONTRACT_PARTS.map((part) => (
-                <div key={part.id} className="border border-terminal-border/50 rounded overflow-hidden">
-                  <button
-                    onClick={() => setExpandedPart(expandedPart === part.id ? null : part.id)}
-                    className="w-full flex items-center justify-between px-3 py-2 hover:bg-terminal-bg transition-colors"
-                  >
-                    <span className="text-[12px] font-bold text-terminal-text">{part.name}</span>
-                    <span className="text-[10px] text-terminal-dim font-display">
-                      {expandedPart === part.id ? '▼' : '▶'}
-                    </span>
-                  </button>
-
-                  {expandedPart === part.id && (
-                    <div className="px-3 pb-3 space-y-2 border-t border-terminal-border/30">
-                      <p className="text-[11px] text-terminal-dim leading-relaxed pt-2">
-                        {part.whatItIs}
-                      </p>
-
-                      <div className="bg-terminal-bg rounded px-3 py-2 border-l-2 border-terminal-accent">
-                        <span className="text-[9px] font-display text-terminal-accent tracking-wider">ANALOGY: </span>
-                        <span className="text-[11px] text-terminal-dim">{part.realWorldAnalogy}</span>
-                      </div>
-
-                      <div className="bg-terminal-bg rounded border border-terminal-border p-2">
-                        <div className="text-[9px] font-display text-terminal-dim tracking-wider mb-1">EXAMPLE:</div>
-                        <pre className="text-[10px] text-terminal-text font-mono leading-relaxed whitespace-pre-wrap">
-                          {part.example}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            {/* Interactive SVG diagram */}
+            <SmartContractDiagram />
           </Panel>
 
           {/* Full example contract */}
@@ -235,105 +190,167 @@ export function Learn() {
       {/* ============================================================ */}
       {activeSection === 'chains' && (
         <div className="space-y-2">
-          {/* Comparison table */}
-          <Panel title="Quick Comparison">
-            <div className="overflow-x-auto">
-              <table className="w-full text-[10px]">
-                <thead>
-                  <tr className="border-b border-terminal-border">
-                    <th className="text-left py-1.5 pr-3 font-display text-terminal-dim tracking-wider">CHAIN</th>
-                    <th className="text-left py-1.5 pr-3 font-display text-terminal-dim tracking-wider">SPEED</th>
-                    <th className="text-left py-1.5 pr-3 font-display text-terminal-dim tracking-wider">COST</th>
-                    <th className="text-left py-1.5 pr-3 font-display text-terminal-dim tracking-wider">SECURITY</th>
-                    <th className="text-left py-1.5 font-display text-terminal-dim tracking-wider">BEST FOR</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {CHAIN_COMPARISON.map(row => (
-                    <tr key={row.symbol} className="border-b border-terminal-border/30">
-                      <td className="py-2 pr-3">
-                        <span className="text-terminal-text font-medium">{row.chain}</span>
-                        <span className="text-terminal-dim ml-1">({row.symbol})</span>
-                      </td>
-                      <td className="py-2 pr-3 text-terminal-dim font-display">{row.speed}</td>
-                      <td className="py-2 pr-3 text-terminal-dim font-display">{row.cost}</td>
-                      <td className="py-2 pr-3 text-terminal-dim font-display">{row.security}</td>
-                      <td className="py-2 text-terminal-dim">{row.bestFor}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Panel>
-
-          {/* Expandable chain profiles */}
-          <Panel title="Deep Dive — Click a Chain to Learn More">
-            <div className="space-y-1">
-              {CHAIN_PROFILES.map(chain => (
-                <div key={chain.id} className="border border-terminal-border/50 rounded overflow-hidden">
-                  {/* Header — always visible */}
+          {/* Scenario-based cost table */}
+          <Panel title="What Does It Actually Cost?">
+            <p className="text-[11px] text-terminal-dim leading-relaxed mb-3">
+              Forget abstract "gas fees." Here's what real actions cost on each chain — in plain dollars.
+            </p>
+            <div className="space-y-2">
+              {COST_SCENARIOS.map((scenario) => (
+                <div key={scenario.action} className="border border-terminal-border/50 rounded overflow-hidden">
                   <button
-                    onClick={() => handleChainToggle(chain.id)}
+                    onClick={() => setExpandedScenario(expandedScenario === scenario.action ? null : scenario.action)}
                     className="w-full flex items-center justify-between px-3 py-2 hover:bg-terminal-bg transition-colors"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-[12px] font-bold text-terminal-text">{chain.name}</span>
-                      <span className="text-[10px] text-terminal-dim font-display">{chain.symbol}</span>
-                      <span className="text-[9px] text-terminal-dim">· Launched {chain.launched}</span>
+                      <span className="text-[10px] text-terminal-accent font-mono font-bold w-5">{scenario.icon}</span>
+                      <div className="text-left">
+                        <span className="text-[12px] font-bold text-terminal-text">{scenario.action}</span>
+                        <span className="text-[10px] text-terminal-dim ml-2">{scenario.description}</span>
+                      </div>
                     </div>
                     <span className="text-[10px] text-terminal-dim font-display">
-                      {expandedChain === chain.id ? '▼' : '▶'}
+                      {expandedScenario === scenario.action ? '\u25BC' : '\u25B6'}
                     </span>
                   </button>
 
-                  {/* Expanded profile */}
-                  {expandedChain === chain.id && (
-                    <div className="px-3 pb-3 space-y-3 border-t border-terminal-border/30">
-                      {/* Personality */}
-                      <div className="pt-3">
-                        <p className="text-[11px] text-terminal-dim leading-relaxed">
-                          {chain.personality}
-                        </p>
-                      </div>
-
-                      {/* Stats grid */}
+                  {expandedScenario === scenario.action && (
+                    <div className="px-3 pb-3 border-t border-terminal-border/30 pt-2">
                       <div className="grid grid-cols-2 gap-2">
                         {[
-                          { label: 'Consensus', value: chain.consensus },
-                          { label: 'Transactions/sec', value: chain.tps },
-                          { label: 'Avg Fee', value: chain.avgFee },
-                          { label: 'Block Time', value: chain.blockTime },
-                        ].map(stat => (
-                          <div key={stat.label} className="bg-terminal-bg rounded px-2 py-1.5">
-                            <div className="text-[8px] text-terminal-dim font-display tracking-wider uppercase">{stat.label}</div>
-                            <div className="text-[11px] text-terminal-text font-medium">{stat.value}</div>
+                          { label: 'Bitcoin (BTC)', value: scenario.btc, color: '#f7931a' },
+                          { label: 'Ethereum (ETH)', value: scenario.eth, color: '#627eea' },
+                          { label: 'Solana (SOL)', value: scenario.sol, color: '#9945ff' },
+                          { label: 'Avalanche (AVAX)', value: scenario.avax, color: '#e84142' },
+                        ].map(item => (
+                          <div key={item.label} className="bg-terminal-bg rounded px-3 py-2 border-l-2" style={{ borderColor: item.color }}>
+                            <div className="text-[9px] font-display tracking-wider mb-1" style={{ color: item.color }}>
+                              {item.label.toUpperCase()}
+                            </div>
+                            <div className="text-[10px] text-terminal-dim leading-relaxed whitespace-pre-line">
+                              {item.value}
+                            </div>
                           </div>
                         ))}
-                      </div>
-
-                      {/* Detail sections */}
-                      <div className="space-y-2 text-[11px]">
-                        <div>
-                          <span className="font-bold text-terminal-accent text-[10px] font-display tracking-wider">BEST FOR: </span>
-                          <span className="text-terminal-dim leading-relaxed">{chain.bestFor}</span>
-                        </div>
-                        <div>
-                          <span className="font-bold text-yellow-400 text-[10px] font-display tracking-wider">TRADEOFFS: </span>
-                          <span className="text-terminal-dim leading-relaxed">{chain.tradeoffs}</span>
-                        </div>
-                        <div>
-                          <span className="font-bold text-terminal-text text-[10px] font-display tracking-wider">ECOSYSTEM: </span>
-                          <span className="text-terminal-dim leading-relaxed">{chain.ecosystem}</span>
-                        </div>
-                        <div className="bg-terminal-bg rounded px-3 py-2 border-l-2 border-terminal-accent">
-                          <span className="text-[10px] font-display text-terminal-dim tracking-wider">KEY FACT: </span>
-                          <span className="text-terminal-dim">{chain.keyFact}</span>
-                        </div>
                       </div>
                     </div>
                   )}
                 </div>
               ))}
+            </div>
+          </Panel>
+
+          {/* Persona cards — "Who is this chain for?" */}
+          <Panel title="Which Chain Is Right for You?">
+            <p className="text-[11px] text-terminal-dim leading-relaxed mb-3">
+              Each chain has a personality. Find the one that matches how you want to use crypto.
+            </p>
+            <div className="space-y-1">
+              {CHAIN_PERSONAS.map(persona => {
+                const colors: Record<string, string> = {
+                  bitcoin: '#f7931a',
+                  ethereum: '#627eea',
+                  solana: '#9945ff',
+                  avalanche: '#e84142',
+                };
+                const color = colors[persona.id] || '#00ff88';
+
+                return (
+                  <div key={persona.id} className="border border-terminal-border/50 rounded overflow-hidden">
+                    <button
+                      onClick={() => handleChainToggle(persona.id)}
+                      className="w-full flex items-center justify-between px-3 py-2 hover:bg-terminal-bg transition-colors"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div
+                          className="w-2 h-2 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: color }}
+                        />
+                        <span className="text-[12px] font-bold text-terminal-text">{persona.chain}</span>
+                        <span className="text-[10px] text-terminal-dim font-display">{persona.symbol}</span>
+                        <span className="text-[9px] text-terminal-dim truncate">{persona.tagline}</span>
+                      </div>
+                      <span className="text-[10px] text-terminal-dim font-display flex-shrink-0 ml-2">
+                        {expandedChain === persona.id ? '\u25BC' : '\u25B6'}
+                      </span>
+                    </button>
+
+                    {expandedChain === persona.id && (
+                      <div className="px-3 pb-3 space-y-3 border-t border-terminal-border/30">
+                        {/* Think of it as */}
+                        <div className="pt-3">
+                          <p className="text-[11px] text-terminal-dim leading-relaxed">
+                            {persona.thinkOfItAs}
+                          </p>
+                        </div>
+
+                        {/* You'll love it if + Watch out for */}
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="bg-terminal-bg rounded px-3 py-2">
+                            <div className="text-[9px] font-display text-terminal-accent tracking-wider mb-1.5">
+                              YOU&apos;LL LOVE IT IF...
+                            </div>
+                            {persona.youllLoveItIf.map((item, i) => (
+                              <div key={i} className="text-[10px] text-terminal-dim leading-relaxed mb-1 flex gap-1.5">
+                                <span className="text-terminal-accent flex-shrink-0">+</span>
+                                <span>{item}</span>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="bg-terminal-bg rounded px-3 py-2">
+                            <div className="text-[9px] font-display text-yellow-400 tracking-wider mb-1.5">
+                              WATCH OUT FOR...
+                            </div>
+                            {persona.watchOutFor.map((item, i) => (
+                              <div key={i} className="text-[10px] text-terminal-dim leading-relaxed mb-1 flex gap-1.5">
+                                <span className="text-yellow-400 flex-shrink-0">!</span>
+                                <span>{item}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Real cost + Trust level */}
+                        <div className="space-y-2">
+                          <div className="bg-terminal-bg rounded px-3 py-2 border-l-2" style={{ borderColor: color }}>
+                            <span className="text-[9px] font-display tracking-wider block mb-1" style={{ color }}>
+                              WHAT IT ACTUALLY COSTS
+                            </span>
+                            <span className="text-[10px] text-terminal-dim leading-relaxed">{persona.realCost}</span>
+                          </div>
+                          <div className="bg-terminal-bg rounded px-3 py-2 border-l-2 border-terminal-accent">
+                            <span className="text-[9px] font-display text-terminal-accent tracking-wider block mb-1">
+                              TRUST & SECURITY
+                            </span>
+                            <span className="text-[10px] text-terminal-dim leading-relaxed">{persona.trustLevel}</span>
+                          </div>
+                        </div>
+
+                        {/* Tech specs link to deep dive */}
+                        {(() => {
+                          const profile = CHAIN_PROFILES.find(c => c.id === persona.id);
+                          if (!profile) return null;
+                          return (
+                            <div className="grid grid-cols-4 gap-1.5">
+                              {[
+                                { label: 'Consensus', value: profile.consensus },
+                                { label: 'TPS', value: profile.tps },
+                                { label: 'Block Time', value: profile.blockTime },
+                                { label: 'TVL', value: profile.tvl },
+                              ].map(stat => (
+                                <div key={stat.label} className="bg-terminal-bg rounded px-2 py-1.5 text-center">
+                                  <div className="text-[7px] text-terminal-dim font-display tracking-wider uppercase">{stat.label}</div>
+                                  <div className="text-[9px] text-terminal-text font-medium">{stat.value}</div>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </Panel>
         </div>

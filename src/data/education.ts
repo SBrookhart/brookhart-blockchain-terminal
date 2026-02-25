@@ -313,6 +313,150 @@ export const CHAIN_COMPARISON: ChainComparisonRow[] = [
   { chain: 'Avalanche', symbol: 'AVAX', speed: '~2 sec finality', cost: '<$0.10', security: 'High', bestFor: 'Enterprise & subnets' },
 ];
 
+// ---- "What Does It Actually Cost?" Scenario Table ----
+
+export interface CostScenario {
+  action: string;
+  description: string;
+  icon: string;
+  btc: string;
+  eth: string;
+  sol: string;
+  avax: string;
+}
+
+export const COST_SCENARIOS: CostScenario[] = [
+  {
+    action: 'Send $100 to a friend',
+    description: 'A simple transfer from your wallet to theirs',
+    icon: '>>',
+    btc: '$1-3 · arrives in ~30 min',
+    eth: '$0.50-5 on L1 · ~3 min\n<$0.01 on L2s · ~15 sec',
+    sol: '<$0.01 · arrives instantly',
+    avax: '$0.03-0.10 · arrives in ~2 sec',
+  },
+  {
+    action: 'Swap tokens on a DEX',
+    description: 'Trade one token for another (like Uniswap)',
+    icon: '<>',
+    btc: 'Not standard — BTC wasn\'t designed for this',
+    eth: '$2-25 on L1 (depends on congestion)\n$0.01-0.10 on L2s like Base/Arbitrum',
+    sol: '$0.01-0.02 on Jupiter',
+    avax: '$0.10-0.25 on Trader Joe',
+  },
+  {
+    action: 'Mint an NFT',
+    description: 'Create or purchase a digital collectible',
+    icon: '[]',
+    btc: '$5-15 via Ordinals (newer, less common)',
+    eth: '$5-50 on L1 (can spike during hype)\n$0.05-0.50 on L2s',
+    sol: '$0.01-0.05 — why most NFT projects moved here',
+    avax: '$0.15-0.50',
+  },
+  {
+    action: 'Provide liquidity / stake',
+    description: 'Deposit money into DeFi to earn yield',
+    icon: '$$',
+    btc: '$2-5 per transaction (limited DeFi options)',
+    eth: '$5-30 on L1 (multiple contract calls)\n$0.05-0.50 on L2s',
+    sol: '$0.01-0.05 — most DeFi actions combined',
+    avax: '$0.10-0.50',
+  },
+];
+
+// ---- "Who Is This Chain For?" Persona Cards ----
+
+export interface ChainPersona {
+  id: string;
+  chain: string;
+  symbol: string;
+  tagline: string;
+  thinkOfItAs: string;
+  youllLoveItIf: string[];
+  watchOutFor: string[];
+  realCost: string;
+  trustLevel: string;
+}
+
+export const CHAIN_PERSONAS: ChainPersona[] = [
+  {
+    id: 'bitcoin',
+    chain: 'Bitcoin',
+    symbol: 'BTC',
+    tagline: 'Digital gold — a savings account, not a checking account',
+    thinkOfItAs: 'The safest vault in crypto. You don\'t use it for daily transactions — you park serious money here for the long term. It\'s the asset that institutions, ETFs, and even governments are buying.',
+    youllLoveItIf: [
+      'You want to hold crypto long-term without worrying about hacks',
+      'You value security and decentralization above all else',
+      'You want exposure to the "blue chip" of crypto',
+    ],
+    watchOutFor: [
+      'Slow and expensive for everyday transactions',
+      'Very limited DeFi — you can\'t do much with BTC beyond holding it',
+      'Not the place for active trading or yield farming',
+    ],
+    realCost: 'Sending BTC typically costs $1-5 and takes 10-60 minutes to confirm. Think of it like a wire transfer — not cheap or fast, but secure and final.',
+    trustLevel: '500,000+ miners, 16+ years running, never been hacked. The most battle-tested network in crypto.',
+  },
+  {
+    id: 'ethereum',
+    chain: 'Ethereum',
+    symbol: 'ETH',
+    tagline: 'The app store of crypto — if you want to DO things, start here',
+    thinkOfItAs: 'The platform where 60% of all DeFi, NFTs, and crypto apps live. It\'s not the cheapest or fastest, but it has the most apps, the most liquidity, and the strongest security for smart contracts.',
+    youllLoveItIf: [
+      'You want access to the largest selection of DeFi apps and tokens',
+      'You value security and don\'t mind paying a bit more for it',
+      'You use Layer 2s (Base, Arbitrum, Optimism) where fees are pennies',
+    ],
+    watchOutFor: [
+      'L1 fees spike during busy periods — sometimes $20+ for a simple swap',
+      'Must learn about L2s to get cheap fees (but it\'s worth it)',
+      'Slower than Solana/Avalanche for time-sensitive trades',
+    ],
+    realCost: 'On L1: $1-20 per transaction depending on congestion. On L2s (where most people should be): usually under $0.10. Most wallets now default to L2s.',
+    trustLevel: '900,000+ validators, 10+ years running, hosts 60%+ of all DeFi value. The most trusted smart contract platform.',
+  },
+  {
+    id: 'solana',
+    chain: 'Solana',
+    symbol: 'SOL',
+    tagline: 'Fast and cheap — Venmo speed at near-zero cost',
+    thinkOfItAs: 'The chain where everything is instant and basically free. Perfect for active traders, memecoin enthusiasts, and anyone who wants a frictionless experience. The tradeoff: it\'s had some reliability issues.',
+    youllLoveItIf: [
+      'You want instant transactions without thinking about fees',
+      'You\'re into memecoins, NFTs, or frequent trading',
+      'You prefer a fast, app-like experience over maximum security',
+    ],
+    watchOutFor: [
+      'Has had multiple network outages (the chain literally stopped)',
+      'Less decentralized — fewer validators, higher hardware requirements',
+      'Memecoin culture means lots of scams and rug pulls mixed in',
+    ],
+    realCost: 'Almost everything costs less than $0.01. A swap, an NFT mint, a transfer — all pennies. This is why active traders love it.',
+    trustLevel: '~2,000 validators, 5 years running. Growing fast but has had reliability issues. The "move fast and break things" chain.',
+  },
+  {
+    id: 'avalanche',
+    chain: 'Avalanche',
+    symbol: 'AVAX',
+    tagline: 'The enterprise pick — fast, customizable, institutional-grade',
+    thinkOfItAs: 'The chain where companies build custom blockchains ("subnets") for specific use cases. If Ethereum is the public internet, Avalanche subnets are like private corporate networks that can still connect to the public one.',
+    youllLoveItIf: [
+      'You\'re interested in institutional DeFi or tokenized real-world assets',
+      'You want near-instant finality (under 2 seconds)',
+      'You care about emerging enterprise use cases like gaming or trade finance',
+    ],
+    watchOutFor: [
+      'Smaller DeFi ecosystem — fewer apps and less liquidity than ETH or SOL',
+      'Less retail/consumer activity means less "buzz"',
+      'The subnet model is powerful but adds complexity for regular users',
+    ],
+    realCost: 'Transactions cost $0.03-0.25 and finalize in under 2 seconds. Cheaper than Ethereum L1, more expensive than Solana, but with faster true finality than both.',
+    trustLevel: '~1,700 validators, 5 years running. Novel consensus protocol with sub-2-second finality. Trusted by institutions building tokenized assets.',
+  },
+];
+
 // ---- Anatomy of a Smart Contract ----
 
 export interface ContractPart {
