@@ -1,23 +1,23 @@
-# Daily Report Implementation Plan
+# Current Pulse Implementation Plan
 
 ## Overview
 
-Replace the current PULSE tab with a **Daily Report** — an hourly-refreshed crypto intelligence briefing inspired by World Monitor's dense, multi-panel approach. The report is the first thing users see when they open BBT.
+Replace the current PULSE tab with **Current Pulse** — an hourly-refreshed crypto intelligence briefing inspired by World Monitor's dense, multi-panel approach. The Current Pulse is the first thing users see when they open BBT.
 
 ---
 
 ## Tab Rename
 
-- PULSE tab becomes **REPORT** (id: `'report'`)
-- Update `TabId` type, `TabBar`, `App.tsx`, keyboard shortcuts
+- PULSE tab becomes **CURRENT PULSE** (id stays `'pulse'`)
+- Update label in `TabBar`
 - Icon: `Newspaper` from lucide-react (replacing `Activity`)
 
 ---
 
-## Report Layout (top to bottom, single scrollable column)
+## Current Pulse Layout (top to bottom, single scrollable column)
 
-### 1. Report Header
-- "DAILY REPORT" title + generated timestamp ("Feb 25, 2026 14:00 UTC")
+### 1. Pulse Header
+- "CURRENT PULSE" title + generated timestamp ("Feb 25, 2026 14:00 UTC")
 - Last updated timestamp + countdown to next auto-refresh ("Next update in 47m")
 - Manual refresh button (circular arrow icon)
 
@@ -81,7 +81,7 @@ Replace the current PULSE tab with a **Daily Report** — an hourly-refreshed cr
 
 | File | Purpose |
 |------|---------|
-| `src/components/Views/Report.tsx` | Main Daily Report view (replaces Pulse.tsx) |
+| `src/components/Views/CurrentPulse.tsx` | Main Current Pulse view (replaces Pulse.tsx) |
 | `src/api/cryptopanic.ts` | CryptoPanic news API client + mock fallback |
 | `src/data/riskAlerts.ts` | Curated risk alert templates |
 | `src/data/reportTemplates.ts` | Executive summary sentence templates |
@@ -90,19 +90,19 @@ Replace the current PULSE tab with a **Daily Report** — an hourly-refreshed cr
 
 | File | Change |
 |------|--------|
-| `src/types/index.ts` | Add `NewsItem`, `RiskAlert`, `ReportData` types. Change `TabId` ('pulse' → 'report') |
-| `src/store/useStore.ts` | Add news, risk alerts, report state. Add refresh timer logic, `lastUpdated` timestamp |
-| `src/components/Layout/TabBar.tsx` | Rename PULSE → REPORT, swap icon |
-| `src/App.tsx` | Swap `Pulse` import for `Report`, update tab rendering + keyboard shortcut |
-| `src/components/Views/Pulse.tsx` | Deleted (replaced by Report.tsx) |
+| `src/types/index.ts` | Add `NewsItem`, `RiskAlert` types |
+| `src/store/useStore.ts` | Add news, risk alerts state. Add refresh timer logic, `lastUpdated` timestamp |
+| `src/components/Layout/TabBar.tsx` | Rename label PULSE → CURRENT PULSE, swap icon |
+| `src/App.tsx` | Swap `Pulse` import for `CurrentPulse`, update tab rendering |
+| `src/components/Views/Pulse.tsx` | Deleted (replaced by CurrentPulse.tsx) |
 
 ## Refresh System
 
 - `useStore` gets: `lastUpdated: Date | null`, `nextRefreshIn: number` (seconds), `refreshReport(): Promise<void>`
 - On mount: fetch all data, set `lastUpdated = now`, start 60-minute interval timer
-- Countdown timer in the Report header ticks every second (local state, not store)
+- Countdown timer in the header ticks every second (local state, not store)
 - Manual refresh button calls `refreshReport()` which re-fetches all APIs + resets timer
-- TopBar or Report header shows "Updated 14m ago" relative timestamp
+- Header shows "Updated 14m ago" relative timestamp
 
 ## API: CryptoPanic
 
@@ -127,7 +127,7 @@ Replace the current PULSE tab with a **Daily Report** — an hourly-refreshed cr
 
 1. Types + data files (riskAlerts, reportTemplates)
 2. CryptoPanic API client
-3. Store updates (news state, refresh logic, tab rename)
-4. Report.tsx view component (all 8 sections)
-5. Wire up navigation (TabBar, App.tsx, delete Pulse.tsx)
+3. Store updates (news state, refresh logic)
+4. CurrentPulse.tsx view component (all 8 sections)
+5. Wire up navigation (TabBar label, App.tsx, delete Pulse.tsx)
 6. Test build passes
