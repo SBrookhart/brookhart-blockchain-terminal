@@ -24,7 +24,7 @@ export function BottomBar() {
         DATA: DEFILLAMA + COINGECKO
       </span>
       <span className="ml-auto tracking-widest">
-        IMM TERMINAL v2.0
+        BROOKHART BLOCKCHAIN TERMINAL v2.0
       </span>
     </footer>
   );

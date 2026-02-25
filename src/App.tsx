@@ -7,6 +7,7 @@ import { Narratives } from './components/Views/Narratives';
 import { Chains } from './components/Views/Chains';
 import { Timeline } from './components/Views/Timeline';
 import { Graveyard } from './components/Views/Graveyard';
+import { Learn } from './components/Views/Learn';
 import { useStore } from './store/useStore';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         case '3': setActiveTab('chains'); break;
         case '4': setActiveTab('timeline'); break;
         case '5': setActiveTab('graveyard'); break;
+        case '6': setActiveTab('learn'); break;
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -44,6 +46,7 @@ function App() {
         {activeTab === 'chains' && <Chains />}
         {activeTab === 'timeline' && <Timeline />}
         {activeTab === 'graveyard' && <Graveyard />}
+        {activeTab === 'learn' && <Learn />}
       </main>
       <BottomBar />
     </div>

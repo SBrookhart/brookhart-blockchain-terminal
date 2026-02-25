@@ -1,5 +1,5 @@
 /**
- * Formatting utilities for the Internet Money Map Terminal.
+ * Formatting utilities for the Brookhart Blockchain Terminal.
  */
 
 /** Format a large number with appropriate suffix ($1.2T, $48.2B, $350M, $12.5K) */

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useStore } from '../../store/useStore';
 import { Panel } from '../Widgets/Panel';
 import { Sparkline } from '../Widgets/Sparkline';
+import { ExecutiveSummary } from '../Widgets/ExecutiveSummary';
 import { formatLargeNumber, formatPercent, getChangeColor } from '../../utils/format';
 import type { NarrativeStatus } from '../../types';
 
@@ -44,7 +45,11 @@ export function Pulse() {
   );
 
   return (
-    <div className="grid grid-cols-12 gap-2 p-2 h-full overflow-y-auto">
+    <div className="space-y-2 p-2 h-full overflow-y-auto">
+      {/* Executive Summary — hero section */}
+      <ExecutiveSummary />
+
+      <div className="grid grid-cols-12 gap-2">
       {/* Left: Narrative rankings */}
       <div className="col-span-7 space-y-2">
         <Panel title="Active Narratives — ranked by momentum">
@@ -193,6 +198,7 @@ export function Pulse() {
             ))}
           </div>
         </Panel>
+      </div>
       </div>
     </div>
   );
