@@ -109,6 +109,42 @@ export interface Narrative {
   risks: string[];
 }
 
+// ---- Top Stories (Pulse) ----
+
+export type StoryCategory = 'market-structure' | 'regulation' | 'institutional' | 'security' | 'narrative-shift' | 'macro';
+
+export interface StorySource {
+  name: string;        // e.g. "CoinDesk", "Bloomberg", "Fortune"
+  url: string;
+  date?: string;       // publication date if different from story date
+}
+
+export interface TopStory {
+  id: string;
+  headline: string;
+  hook: string;                     // 1-2 sentence lede — what happened
+  analysis: string;                 // editorial body — why it matters, what to watch
+  sources: StorySource[];
+  category: StoryCategory;
+  sentiment: 'bullish' | 'bearish' | 'neutral' | 'caution';
+  importance: number;               // 1-10, for ranking
+  date: string;                     // ISO date
+  relatedNarratives?: string[];     // IDs from narratives.ts
+  relatedTokens?: string[];
+  tags?: string[];
+}
+
+// ---- News Wire ----
+
+export interface WireItem {
+  id: string;
+  headline: string;
+  source: string;
+  url: string;
+  timestamp: string;
+  category?: StoryCategory;
+}
+
 // ---- Dead Projects ----
 
 export interface DeadProject {
@@ -146,6 +182,8 @@ export interface AppState {
   events: NarrativeEvent[];
   deadProjects: DeadProject[];
   flows: CapitalFlow[];
+  topStories: TopStory[];
+  wireItems: WireItem[];
 
   // Selection
   selectedChain: string | null;

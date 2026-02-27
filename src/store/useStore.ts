@@ -4,6 +4,7 @@ import { NARRATIVES } from '../data/narratives';
 import { EVENTS } from '../data/events';
 import { DEAD_PROJECTS } from '../data/deadProjects';
 import { FLOWS } from '../data/flows';
+import { TOP_STORIES, WIRE_ITEMS } from '../data/topStories';
 import { fetchChains, fetchProtocols, fetchChainTvl, MOCK_CHAINS, MOCK_PROTOCOLS } from '../api/defillama';
 import { fetchTopTokens, fetchGlobalData, MOCK_TOP_TOKENS, MOCK_GLOBAL } from '../api/coingecko';
 
@@ -24,6 +25,8 @@ export const useStore = create<AppState>((set) => ({
   events: EVENTS,
   deadProjects: DEAD_PROJECTS,
   flows: FLOWS,
+  topStories: TOP_STORIES,
+  wireItems: WIRE_ITEMS,
 
   // Selection
   selectedChain: null,
