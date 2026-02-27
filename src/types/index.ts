@@ -95,6 +95,7 @@ export interface Narrative {
   name: string;
   status: NarrativeStatus;
   thesis: string;
+  analysis: string;                 // deeper editorial — why it matters now
   chains: string[];
   protocols: string[];
   tokens: string[];
@@ -107,6 +108,7 @@ export interface Narrative {
   keyMetrics: Array<{ label: string; value: string }>;
   catalysts: string[];
   risks: string[];
+  sources: StorySource[];
 }
 
 // ---- Top Stories (Pulse) ----

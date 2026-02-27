@@ -80,12 +80,19 @@ export function Narratives() {
                     <span className={getChangeColor(n.tvlChange7d)}>{formatPercent(n.tvlChange7d)}</span>
                     <span className="text-terminal-accent">{n.socialScore}/100</span>
                   </div>
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {n.chains.slice(0, 3).map(chain => (
-                      <span key={chain} className="text-[8px] text-terminal-dim bg-terminal-surface px-1.5 py-0.5 rounded border border-terminal-border">
-                        {chain}
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="flex flex-wrap gap-1">
+                      {n.chains.slice(0, 3).map(chain => (
+                        <span key={chain} className="text-[8px] text-terminal-dim bg-terminal-surface px-1.5 py-0.5 rounded border border-terminal-border">
+                          {chain}
+                        </span>
+                      ))}
+                    </div>
+                    {n.sources.length > 0 && (
+                      <span className="text-[8px] text-terminal-dim font-display">
+                        {n.sources.length} sources
                       </span>
-                    ))}
+                    )}
                   </div>
                 </div>
               );
@@ -200,6 +207,15 @@ export function Narratives() {
             )}
           </div>
 
+          {/* Analysis — deep editorial */}
+          {narrative.analysis && (
+            <Panel title="Analysis — What's Happening Right Now">
+              <div className="text-[11px] text-terminal-dim leading-[1.7] whitespace-pre-line">
+                {narrative.analysis}
+              </div>
+            </Panel>
+          )}
+
           {/* Catalysts & Risks side by side */}
           <div className="grid grid-cols-2 gap-2">
             {narrative.catalysts.length > 0 && (
@@ -227,6 +243,31 @@ export function Narratives() {
               </Panel>
             )}
           </div>
+
+          {/* Sources */}
+          {narrative.sources.length > 0 && (
+            <Panel title="Sources — Further Reading">
+              <div className="flex flex-wrap gap-2">
+                {narrative.sources.map((source, i) => (
+                  <a
+                    key={i}
+                    href={source.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[10px] text-terminal-accent hover:underline bg-terminal-bg px-2 py-1.5 rounded border border-terminal-border/50 hover:border-terminal-accent/50 transition-colors"
+                  >
+                    <span className="text-terminal-dim">{'\u2197'}</span>
+                    {source.name}
+                    {source.date && (
+                      <span className="text-terminal-dim text-[8px]">
+                        {new Date(source.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </span>
+                    )}
+                  </a>
+                ))}
+              </div>
+            </Panel>
+          )}
 
           {/* Related events */}
           {relatedEvents.length > 0 && (
